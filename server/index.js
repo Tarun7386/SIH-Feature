@@ -22,11 +22,10 @@ mongoose.connect("mongodb://localhost:27017/DropDown" , {
     console.error('MongoDB connection error:', error.message);
     process.exit(1); 
   });
+
   app.get('/', (req, res) => {
-    res.send('Welcome to the home page!');
+    res.send('Welcome to the server page!');
   });
-
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

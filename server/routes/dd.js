@@ -1,38 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const { KeyValue } = require('../db/dropdownschema.js');
+const { CategoryCollection } = require('../db/dropdownschema.js');
 
-// Route to get all keys
-router.get('/keys', async (req, res) => {
+
+router.get('/categories', async (req, res) => {
   try {
-    const keys = await KeyValue.find().select('key');
-    res.json(keys);
+    const categories = await CategoryCollection.find({});
+    res.json(categories);
   } catch (error) {
-    console.error('Error fetching keys:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ message: 'Error fetching categories', error });
   }
 });
 
-// Route to get value by key
-router.get('/value/:key', async (req, res) => {
-    const { key } = req.params;
-    console.log(`Fetching value for key: '${key}'`); 
-    
-    try {
-     
-    const entry = await KeyValue.findOne({ key: key });
-
-      
-      if (entry) {
-        console.log('Entry found:', entry); 
-        res.json({ value: entry.value });
-      } else {
-        res.status(404).json({ error: 'Key not found' });
-      }
-    } catch (error) {
-      console.error('Error fetching value:', error);
-      res.status(500).json({ error: 'Internal server error' });
+router.get('/values/:key', async (req, res) => {
+  try {
+    const key = req.params.key;
+    const category = await CategoryCollection.findOne({ key });
+    if (category) {
+      res.json(category.values);
+    } else {
+      res.status(404).json({ message: 'Category not found' });
     }
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching values', error });
+  }
+});
+  router.post('/submit', (req, res) => {
+    const { selectedValue } = req.body;
+    console.log('Submitted value:', selectedValue);
+    
+    res.send('Value received');
   });
-
 module.exports = router;

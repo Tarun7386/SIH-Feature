@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
-const KeyValueSchema = new mongoose.Schema({
-    key: String,
-    value: String,
-  });
-  
-const KeyValue = mongoose.model('KeyValue', KeyValueSchema);
-module.exports = {
-    KeyValue
-};
+
+const CategorySchema = new mongoose.Schema({
+  key: { type: String, required: true, unique: true },
+  values: [{ type: String }]
+});
+const CategoryCollection = mongoose.model('Category', CategorySchema);
+
+module.exports={
+  CategoryCollection,
+}
